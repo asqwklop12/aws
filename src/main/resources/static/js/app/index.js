@@ -8,6 +8,10 @@ var index = {
         $('#btn-update').on('click',function() {
             _this.update();
         });
+
+        $('#btn-delete').on('click',function() {
+            _this.delete();
+        });
     },
 
       save : function () {
@@ -32,7 +36,7 @@ var index = {
     },
 
     update : function() {
-        var date = {
+        var data = {
             title : $('#title').val(),
             content : $('#content').val()
         };
@@ -47,6 +51,22 @@ var index = {
             data : JSON.stringify(data)
         }).done(function() {
             alert('글이 수정되었습니다.');
+            window.location.href = '/';
+        }).fail(function() {
+            alert(JSON.stringify(error));
+        });
+    },
+
+    delete : function() {
+        var id = $('#id').val();
+
+        $.ajax({
+            type : 'DELETE',
+            url : '/api/v1/posts/' + id,
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8'
+        }).done(function() {
+            alert("글이 삭제 되었습니다.");
             window.location.href = '/';
         }).fail(function() {
             alert(JSON.stringify(error));
