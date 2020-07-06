@@ -1,5 +1,7 @@
 package com.klom.springboot.web;
 
+import com.klom.springboot.config.auth.LoginUser;
+import com.klom.springboot.config.auth.dto.SessionUser;
 import com.klom.springboot.service.PostsService;
 import com.klom.springboot.web.dto.PostResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -9,14 +11,22 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpSession;
+
 @RequiredArgsConstructor
 @Controller
 public class IndexController {
 
     private final PostsService postsService;
+
     @GetMapping("/")
-    public String index(Model model) {
+    public String index(Model model, @LoginUser SessionUser user) {
         model.addAttribute("posts",postsService.findAllDesc());
+
+        if(user != null) {
+            model.addAttribute("username", user.getName());
+        }
+
         return "index";
     }
 
